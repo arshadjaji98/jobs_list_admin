@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_admin/my_jobs.dart';
+import 'package:grocery_app_admin/announcements.dart';
 import 'package:grocery_app_admin/widgets/text_style.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
@@ -180,6 +181,21 @@ class _AddJobState extends State<AddJob> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MyJobs()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.announcement, color: Color(0XFF8a4af3)),
+              title: Text(
+                'Announcements',
+                style: AppWidgets.boldTextFieldStyle(),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AnnouncementsScreen()),
                 );
               },
             ),

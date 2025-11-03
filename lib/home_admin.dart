@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:grocery_app_admin/add_job.dart';
 import 'package:grocery_app_admin/admin_login.dart';
 import 'package:grocery_app_admin/my_jobs.dart';
+import 'package:grocery_app_admin/announcements.dart';
 import 'package:grocery_app_admin/services/services.dart';
 import 'package:grocery_app_admin/widgets/order_list.dart';
 import 'package:grocery_app_admin/widgets/text_style.dart';
@@ -97,6 +98,19 @@ class _HomeAdminState extends State<HomeAdmin> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const MyJobs()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.announcement,
+                          color: Color(0XFF8a4af3)),
+                      title: const Text('Announcements',
+                          style: TextStyle(color: Color(0XFF8a4af3))),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AnnouncementsScreen()));
                       },
                     ),
                     ListTile(
