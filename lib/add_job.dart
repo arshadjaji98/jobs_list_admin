@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app_admin/admin_login.dart';
 import 'package:grocery_app_admin/my_jobs.dart';
 import 'package:grocery_app_admin/announcements.dart';
 import 'package:grocery_app_admin/widgets/text_style.dart';
@@ -131,7 +132,7 @@ class _AddJobState extends State<AddJob> {
       appBar: AppBar(
         backgroundColor: Color(0XFF8a4af3),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Add Item",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -157,6 +158,7 @@ class _AddJobState extends State<AddJob> {
                 ),
               ),
             ),
+            // Top items
             ListTile(
               leading: const Icon(Icons.add_box, color: Color(0XFF8a4af3)),
               title: Text(
@@ -196,6 +198,23 @@ class _AddJobState extends State<AddJob> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const AnnouncementsScreen()),
+                );
+              },
+            ),
+
+            // This pushes the logout to the bottom
+            Expanded(child: Container()),
+
+            ListTile(
+              leading: const Icon(Icons.logout, color: Color(0XFF8a4af3)),
+              title: Text(
+                'Log Out',
+                style: AppWidgets.boldTextFieldStyle(),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AdminLogIn()),
                 );
               },
             ),

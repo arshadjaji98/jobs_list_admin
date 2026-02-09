@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:grocery_app_admin/add_job.dart';
 import 'package:grocery_app_admin/admin_login.dart';
-import 'package:grocery_app_admin/home_admin.dart';
 import 'package:grocery_app_admin/responsive/web_responsive.dart';
 import 'package:grocery_app_admin/widgets/text_style.dart';
 import 'package:grocery_app_admin/widgets/utils.dart';
@@ -58,8 +58,8 @@ class _AdminSignUpState extends State<AdminSignUp> {
             .collection("users")
             .doc(value.user!.uid)
             .set(addUserInfo);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeAdmin()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const AddJob()));
         Utils.toastMessage("Registered Successfully");
       }).onError((e, s) {
         Utils.toastMessage(e.toString());
