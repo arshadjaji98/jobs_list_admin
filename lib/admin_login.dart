@@ -38,6 +38,10 @@ class _AdminLogInState extends State<AdminLogIn> {
           _isLoading = true; // Start loading
         });
 
+        // Get email and password from controllers
+        email = userEmailController.text;
+        password = userPasswordController.text;
+
         // Attempt login
         final value = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
@@ -190,6 +194,7 @@ class _AdminLogInState extends State<AdminLogIn> {
                                               .validate()) {
                                             setState(() {});
                                             await userLogin();
+                                            print('error: ${email + password}');
                                           }
                                         },
                                         child: Material(
