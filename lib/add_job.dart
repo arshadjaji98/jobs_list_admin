@@ -133,7 +133,7 @@ class _AddJobState extends State<AddJob> {
         backgroundColor: Color(0XFF8a4af3),
         centerTitle: true,
         title: const Text(
-          "Add Item",
+          "Add Job",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
