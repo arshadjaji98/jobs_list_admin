@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -134,7 +136,7 @@ class _AddJobState extends State<AddJob> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0XFF8a4af3),
+        backgroundColor: const Color(0XFF8a4af3),
         centerTitle: true,
         title: const Text(
           "Add Job",
@@ -451,7 +453,7 @@ class _AddJobState extends State<AddJob> {
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       width: 150,
                       decoration: BoxDecoration(
-                        color: Color(0XFF8a4af3),
+                        color: const Color(0XFF8a4af3),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(

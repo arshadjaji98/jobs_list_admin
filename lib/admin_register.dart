@@ -59,7 +59,9 @@ class _AdminSignUpState extends State<AdminSignUp> {
             .doc(value.user!.uid)
             .set(addUserInfo);
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const AddJob()));
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(builder: (context) => const AddJob()));
         Utils.toastMessage("Registered Successfully");
       }).onError((e, s) {
         Utils.toastMessage(e.toString());

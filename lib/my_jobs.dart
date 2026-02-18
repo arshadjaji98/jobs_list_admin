@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +30,13 @@ class _MyJobsState extends State<MyJobs> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddJob()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddJob()));
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         centerTitle: true,
-        title: Text("My Jobs",
+        title: const Text("My Jobs",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0XFF8a4af3),
       ),
@@ -51,7 +53,7 @@ class _MyJobsState extends State<MyJobs> {
                 prefixIcon:
                     const Icon(Icons.category, color: Color(0XFF8a4af3)),
               ),
-              value: selectedCategory,
+              initialValue: selectedCategory,
               isExpanded: true,
               onChanged: (value) {
                 setState(() {
