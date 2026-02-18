@@ -25,6 +25,8 @@ class _AddJobState extends State<AddJob> {
     'Semi-Govt Jobs',
     'Others'
   ];
+  TextEditingController requirementsController = TextEditingController(); // New
+  bool isActive = true;
   String? value;
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController(); // Last Date
@@ -80,9 +82,10 @@ class _AddJobState extends State<AddJob> {
         "name": nameController.text.trim(),
         "price": priceController.text.trim(),
         "quantity": quantityController.text.trim(),
-        "detail": detailController.text.trim(),
+        "requirements": requirementsController.text.trim(), // New
         "location": locationController.text.trim(),
         "vacancies": vacanciesController.text.trim(),
+        "active": isActive, // New
         "timestamp": FieldValue.serverTimestamp(),
         "adminId": FirebaseAuth.instance.currentUser!.uid,
         "type": value,
@@ -105,6 +108,7 @@ class _AddJobState extends State<AddJob> {
       quantityController.clear();
       locationController.clear();
       vacanciesController.clear();
+      requirementsController.clear();
 
       selectedImage = null;
       value = null;
@@ -343,6 +347,27 @@ class _AddJobState extends State<AddJob> {
                       border: InputBorder.none,
                       hintText: "Enter Job Details",
                       hintStyle: AppWidgets.semiBoldTextFieldStyle()),
+                ),
+              ),
+              const SizedBox(height: 30.0),
+              Text("Job Requirements / Qualifications",
+                  style: AppWidgets.semiBoldTextFieldStyle()),
+              const SizedBox(height: 10.0),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFececf8),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: requirementsController,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Enter Minimum Qualifications / Experience",
+                    hintStyle: AppWidgets.lightTextFieldStyle(),
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
