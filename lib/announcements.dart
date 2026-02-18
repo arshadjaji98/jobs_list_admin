@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_admin/widgets/text_style.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 
@@ -70,9 +72,15 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
 
       await docRef.set(announcement);
 
+      // Send FCM Notification
+      await sendNotificationToAll(
+        titleController.text.trim(),
+        bodyController.text.trim(),
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         backgroundColor: Colors.green,
-        content: Text('Announcement posted'),
+        content: Text('Announcement posted & notification sent'),
       ));
 
       titleController.clear();
@@ -89,6 +97,31 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
         isLoading = false;
       });
     }
+  }
+
+// Function to send notification to all users subscribed to "all" topic
+  Future<void> sendNotificationToAll(String title, String body) async {
+    const serverKey =
+        'AAAApADv0BQ:APA91bH2SWI7WDqWsiI2QjVa73ia3JMh8-SSYt_sySeFXHXkQ5mIJoyO76wOnmmaddilnXUyJ_vONiNN2Xpc4C6dg0IYhWZBLoa_CJ1wDmigzp83TpcQTXJJKll7rZNYkrGPmyEp4h6p';
+    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverKey',
+      },
+      body: jsonEncode({
+        "to": "/topics/all", // send to all users
+        "notification": {
+          "title": title.isEmpty ? 'New Announcement' : title,
+          "body": body.isEmpty ? 'Check the app for details' : body,
+        },
+        "priority": "high",
+      }),
+    );
+
+    print('FCM Response: ${response.body}');
   }
 
   @override

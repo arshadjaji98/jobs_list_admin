@@ -54,6 +54,8 @@ dependencies:
   get: ^4.6.6
   provider: ^6.1.2
   flutter_launcher_icons: ^0.14.1
+  firebase_messaging: ^15.2.10
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
