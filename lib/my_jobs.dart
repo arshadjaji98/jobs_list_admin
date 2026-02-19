@@ -169,6 +169,19 @@ class _MyJobsState extends State<MyJobs> {
         TextEditingController(text: job['name']);
     final TextEditingController dateController =
         TextEditingController(text: job['price'].toString());
+    final TextEditingController descriptionController =
+        TextEditingController(text: job['detail'] ?? '');
+    final TextEditingController locationController =
+        TextEditingController(text: job['location'] ?? '');
+    String selectedCategory = job['type'] ?? 'All Jobs';
+
+    List<String> categories = [
+      'Forces Jobs',
+      'Govt Jobs',
+      'Private Jobs',
+      'Semi-Govt Jobs',
+      'Others'
+    ];
 
     showDialog(
       context: context,
@@ -181,10 +194,36 @@ class _MyJobsState extends State<MyJobs> {
                 controller: nameController,
                 decoration: const InputDecoration(labelText: "Job Name"),
               ),
+              const SizedBox(height: 12),
               TextField(
                 controller: dateController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: "Last Date"),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: descriptionController,
+                maxLines: 3,
+                decoration: const InputDecoration(labelText: "Description"),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: locationController,
+                decoration: const InputDecoration(labelText: "Location"),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: "Category"),
+                value: selectedCategory,
+                items: categories
+                    .map((cat) => DropdownMenuItem(
+                          value: cat,
+                          child: Text(cat),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) selectedCategory = value;
+                },
               ),
             ],
           ),
@@ -202,6 +241,9 @@ class _MyJobsState extends State<MyJobs> {
                   .update({
                 'name': nameController.text,
                 'price': dateController.text,
+                'detail': descriptionController.text,
+                'location': locationController.text,
+                'type': selectedCategory,
               }).then((value) {
                 Navigator.pop(context);
                 Utils.toastMessage("Job updated successfully!");
@@ -221,7 +263,7 @@ class _MyJobsState extends State<MyJobs> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Delete Job"),
-        content: const Text("Are you sure you want to delete this job?"),
+        content: const Text("This will delete this Job permanently"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
