@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_admin/admin_login.dart';
 import 'package:grocery_app_admin/my_jobs.dart';
@@ -27,9 +29,16 @@ class _AddJobState extends State<AddJob> {
     'Semi-Govt Jobs',
     'Others'
   ];
+  final List<String> experienceLevels = [
+    'Entry Level',
+    'Mid Level',
+    'Senior',
+    'Executive'
+  ];
   TextEditingController requirementsController = TextEditingController(); // New
   bool isActive = true;
   String? value;
+  String? experienceValue;
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController(); // Last Date
   TextEditingController detailController = TextEditingController();
@@ -37,12 +46,12 @@ class _AddJobState extends State<AddJob> {
   TextEditingController locationController = TextEditingController(); // NEW
   TextEditingController vacanciesController = TextEditingController(); // NEW
   final ImagePicker _picker = ImagePicker();
-  File? selectedImage;
+  XFile? selectedImage;
 
   Future getImage() async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
 
-    selectedImage = File(image!.path);
+    selectedImage = image;
     setState(() {});
   }
 
@@ -72,7 +81,13 @@ class _AddJobState extends State<AddJob> {
       Reference firebaseStorageRef =
           FirebaseStorage.instance.ref().child("blogImages/$addId");
 
-      UploadTask task = firebaseStorageRef.putFile(selectedImage!);
+      UploadTask task;
+      if (kIsWeb) {
+        Uint8List bytes = await selectedImage!.readAsBytes();
+        task = firebaseStorageRef.putData(bytes);
+      } else {
+        task = firebaseStorageRef.putFile(File(selectedImage!.path));
+      }
       String downloadUrl = await (await task).ref.getDownloadURL();
 
       DocumentReference productRef =
@@ -87,6 +102,7 @@ class _AddJobState extends State<AddJob> {
         "requirements": requirementsController.text.trim(), // New
         "location": locationController.text.trim(),
         "vacancies": vacanciesController.text.trim(),
+        "experience": experienceValue ?? '',
         "active": isActive, // New
         "timestamp": FieldValue.serverTimestamp(),
         "adminId": FirebaseAuth.instance.currentUser!.uid,
@@ -114,6 +130,7 @@ class _AddJobState extends State<AddJob> {
 
       selectedImage = null;
       value = null;
+      experienceValue = null;
 
       setState(() {});
     } catch (e) {
@@ -282,10 +299,15 @@ class _AddJobState extends State<AddJob> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.file(
-                                selectedImage!,
-                                fit: BoxFit.cover,
-                              ),
+                              child: kIsWeb
+                                  ? Image.network(
+                                      selectedImage!.path,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      File(selectedImage!.path),
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),
@@ -412,6 +434,36 @@ class _AddJobState extends State<AddJob> {
                   ),
                 ),
               ),
+              const SizedBox(height: 30.0),
+              Text("Experience Required",
+                  style: AppWidgets.semiBoldTextFieldStyle()),
+              const SizedBox(height: 10.0),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFececf8),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                          items: experienceLevels
+                              .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                        fontSize: 18.0, color: Colors.black),
+                                  )))
+                              .toList(),
+                          onChanged: ((value) => setState(() {
+                                experienceValue = value;
+                              })),
+                          dropdownColor: Colors.white,
+                          hint: const Text("Select Experience Level"),
+                          iconSize: 36,
+                          icon: const Icon(Icons.arrow_drop_down,
+                              color: Colors.black),
+                          value: experienceValue))),
               const SizedBox(height: 20.0),
               Text("Select Category",
                   style: AppWidgets.semiBoldTextFieldStyle()),
